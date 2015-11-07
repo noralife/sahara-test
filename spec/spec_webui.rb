@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Sahara' do
+describe 'SaharaWebUI' do
   context 'without login' do
     before do
       visit '/'
@@ -80,7 +80,7 @@ describe 'Sahara' do
       expect(page).to have_content('Logout')
       sleep(0.5)
       find('#logout-link').click
-      expect(page).to have_no_content("Logout")
+      expect(page).to have_no_content('Logout')
       expect(page).to have_content('Login')
     end
 
