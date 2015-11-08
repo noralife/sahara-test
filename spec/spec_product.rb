@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'SaharaProductAPI' do
   context 'without new product' do
     it 'shows product list' do
-      response = get '/api/v1/products'
+      response = get SAHARA_PMS_URL, '/api/v1/products'
       expect(response.size).to be > 0
     end
   end
@@ -12,6 +12,7 @@ describe 'SaharaProductAPI' do
     before do
       @admin_token = token('admin@ho.ge', 'admin')
       @new_product = post(
+        SAHARA_PMS_URL,
         '/api/v1/products',
         {'name' => 'test product', 'desc' => 'test'},
 	'SAHARA-TOKEN' => @admin_token
@@ -20,7 +21,12 @@ describe 'SaharaProductAPI' do
 
     after do
       unless @new_product['product']['id'].nil?
-        delete '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA-TOKEN' => @admin_token
+        delete(
+          SAHARA_PMS_URL,
+	  '/api/v1/products/' + @new_product['product']['id'].to_s,
+	  '',
+	  'SAHARA-TOKEN' => @admin_token
+	)
       end
     end
 
@@ -32,7 +38,7 @@ describe 'SaharaProductAPI' do
     end
 
     it 'shows product detail' do
-      response = get '/api/v1/products/' + @new_product['product']['id'].to_s
+      response = get SAHARA_PMS_URL, '/api/v1/products/' + @new_product['product']['id'].to_s
       expect(response['id']).to eq(@new_product['product']['id'])
       expect(response['name']).to eq(@new_product['product']['name'])
       expect(response['desc']).to eq(@new_product['product']['desc'])
@@ -40,6 +46,7 @@ describe 'SaharaProductAPI' do
 
     it 'updates product' do
       response = put(
+        SAHARA_PMS_URL,
         '/api/v1/products/' + @new_product['product']['id'].to_s,
         {'name' => 'NEW test product', 'desc' => 'NEW test'},
 	'SAHARA-TOKEN' => @admin_token
@@ -50,7 +57,7 @@ describe 'SaharaProductAPI' do
     end
 
     it 'deletes product' do
-      response = delete '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA-TOKEN' => @admin_token
+      response = delete SAHARA_PMS_URL, '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA-TOKEN' => @admin_token
       expect(response['status']).to eq('success')
       @new_product['product']['id'] = nil
     end

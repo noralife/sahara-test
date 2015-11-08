@@ -7,7 +7,7 @@ describe 'SaharaCustomerAPI' do
   end
   context 'without new customer' do
     it 'shows customer list' do
-      response = get '/api/v1/customers', 'SAHARA-TOKEN' => @admin_token
+      response = get SAHARA_CMS_URL, '/api/v1/customers', 'SAHARA-TOKEN' => @admin_token
       expect(response.size).to be > 3
     end
   end
@@ -17,11 +17,13 @@ describe 'SaharaCustomerAPI' do
       id = rand(10000) + 1
       @admin_token  = token('admin@ho.ge', 'admin')
       @new_customer = post(
+        SAHARA_CMS_URL,
         '/api/v1/customers',
         { 'email' => "api#{id}@ho.ge", name: 'api', password: 'api', token: 'api', role: 'user'},
         'SAHARA-TOKEN' => @admin_token
       )
       @new_customer_token = post(
+        SAHARA_CMS_URL,
         '/api/v1/login',
 	{email:"api#{id}@ho.ge", password: 'api'}
       )["token"]
@@ -30,6 +32,7 @@ describe 'SaharaCustomerAPI' do
     after do
       unless @new_customer['customer']['id'].nil?
         delete(
+	  SAHARA_CMS_URL,
           '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
           '',
           'SAHARA-TOKEN' => @new_customer_token
@@ -44,6 +47,7 @@ describe 'SaharaCustomerAPI' do
 
     it 'shows customer detail' do
       response = get(
+        SAHARA_CMS_URL,
         '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
         'SAHARA-TOKEN' => @new_customer_token
       )
@@ -54,6 +58,7 @@ describe 'SaharaCustomerAPI' do
 
     it 'updates customer' do
       response = put(
+        SAHARA_CMS_URL,
         '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
         { 'name' => 'new api' },
         'SAHARA-TOKEN' => @new_customer_token
@@ -65,6 +70,7 @@ describe 'SaharaCustomerAPI' do
 
     it 'deletes customer' do
       response = delete(
+        SAHARA_CMS_URL,
         '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
         '',
         'SAHARA-TOKEN' => @new_customer_token

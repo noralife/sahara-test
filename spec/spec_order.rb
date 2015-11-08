@@ -6,7 +6,7 @@ describe 'SaharaOrderAPI' do
   end
   context 'without new order' do
     it 'shows order list' do
-      response = get '/api/v1/orders', 'SAHARA-TOKEN' => @token
+      response = get SAHARA_OMS_URL, '/api/v1/orders', 'SAHARA-TOKEN' => @token
       expect(response.size).to be > 0
     end
   end
@@ -14,6 +14,7 @@ describe 'SaharaOrderAPI' do
   context 'with new order' do
     before do
       @new_order = post(
+        SAHARA_OMS_URL,
         '/api/v1/orders',
         { 'customer_id' => 1, 'product_id' => 1 },
         'SAHARA-TOKEN' => @token
@@ -23,6 +24,7 @@ describe 'SaharaOrderAPI' do
     after do
       unless @new_order['order']['id'].nil?
         delete(
+          SAHARA_OMS_URL,
           '/api/v1/orders/' + @new_order['order']['id'].to_s,
           '',
           'SAHARA-TOKEN' => @token
@@ -37,6 +39,7 @@ describe 'SaharaOrderAPI' do
 
     it 'shows order detail' do
       response = get(
+        SAHARA_OMS_URL,
         '/api/v1/orders/' + @new_order['order']['id'].to_s,
         'SAHARA-TOKEN' => @token
       )
@@ -47,6 +50,7 @@ describe 'SaharaOrderAPI' do
 
     it 'updates order' do
       response = put(
+        SAHARA_OMS_URL,
         '/api/v1/orders/' + @new_order['order']['id'].to_s,
         { 'status' => 'ok' },
         'SAHARA-TOKEN' => @token
@@ -57,6 +61,7 @@ describe 'SaharaOrderAPI' do
 
     it 'deletes order' do
       response = delete(
+        SAHARA_OMS_URL,
         '/api/v1/orders/' + @new_order['order']['id'].to_s,
         '',
         'SAHARA-TOKEN' => @token

@@ -17,16 +17,16 @@ module WaitForAjax
 end
 
 module SaharaAPI
-  def get(endpoint, headers = {})
-    uri          = URI.parse(Capybara.app_host + endpoint)
+  def get(host_url, endpoint, headers = {})
+    uri          = URI.parse(host_url + endpoint)
     http         = Net::HTTP.new(uri.host, uri.port)
     request      = Net::HTTP::Get.new(uri.request_uri, headers)
     raw_response = http.request(request)
     JSON.parse(raw_response.body)
   end
 
-  def post(endpoint, data, headers = {})
-    uri      = URI.parse(Capybara.app_host + endpoint)
+  def post(host_url, endpoint, data, headers = {})
+    uri      = URI.parse(host_url + endpoint)
     http     = Net::HTTP.new(uri.host, uri.port)
     request  = Net::HTTP::Post.new(uri.request_uri, headers)
     request.set_form_data(data)
@@ -34,8 +34,8 @@ module SaharaAPI
     JSON.parse(raw_response.body)
   end
 
-  def put(endpoint, data, headers = {})
-    uri      = URI.parse(Capybara.app_host + endpoint)
+  def put(host_url, endpoint, data, headers = {})
+    uri      = URI.parse(host_url + endpoint)
     http     = Net::HTTP.new(uri.host, uri.port)
     request  = Net::HTTP::Put.new(uri.request_uri, headers)
     request.set_form_data(data)
@@ -43,8 +43,8 @@ module SaharaAPI
     JSON.parse(raw_response.body)
   end
 
-  def delete(endpoint, data, headers = {})
-    uri      = URI.parse(Capybara.app_host + endpoint)
+  def delete(host_url, endpoint, data, headers = {})
+    uri      = URI.parse(host_url + endpoint)
     http     = Net::HTTP.new(uri.host, uri.port)
     request  = Net::HTTP::Delete.new(uri.request_uri, headers)
     request.set_form_data(data) unless data.empty?
@@ -53,8 +53,9 @@ module SaharaAPI
   end
 
   def token(email, password)
-    post('/api/v1/login', 'email' => email, 'password' => password)['token']
+    post(SAHARA_CMS_URL, '/api/v1/login', 'email' => email, 'password' => password)['token']
   end
+
 end
 
 RSpec.configure do |config|
@@ -74,3 +75,7 @@ end
 Capybara.default_driver = :selenium
 Capybara.app_host = ENV['SAHARA_URL'] || 'http://localhost:3000'
 Capybara.default_max_wait_time = 5
+
+SAHARA_CMS_URL = ENV['SAHARA_CMS_URL'] || 'http://localhost:3000' 
+SAHARA_PMS_URL = ENV['SAHARA_PMS_URL'] || 'http://localhost:3000'
+SAHARA_OMS_URL = ENV['SAHARA_OMS_URL'] || 'http://localhost:3000'
