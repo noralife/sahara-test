@@ -14,13 +14,13 @@ describe 'SaharaProductAPI' do
       @new_product = post(
         '/api/v1/products',
         {'name' => 'test product', 'desc' => 'test'},
-	'SAHARA_TOKEN' => @admin_token
+	'SAHARA-TOKEN' => @admin_token
       )
     end
 
     after do
       unless @new_product['product']['id'].nil?
-        delete '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA_TOKEN' => @admin_token
+        delete '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA-TOKEN' => @admin_token
       end
     end
 
@@ -42,7 +42,7 @@ describe 'SaharaProductAPI' do
       response = put(
         '/api/v1/products/' + @new_product['product']['id'].to_s,
         {'name' => 'NEW test product', 'desc' => 'NEW test'},
-	'SAHARA_TOKEN' => @admin_token
+	'SAHARA-TOKEN' => @admin_token
       )
       expect(response['product']['id']).to eq(@new_product['product']['id'])
       expect(response['product']['name']).to eq('NEW ' + @new_product['product']['name'])
@@ -50,7 +50,7 @@ describe 'SaharaProductAPI' do
     end
 
     it 'deletes product' do
-      response = delete '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA_TOKEN' => @admin_token
+      response = delete '/api/v1/products/' + @new_product['product']['id'].to_s, '', 'SAHARA-TOKEN' => @admin_token
       expect(response['status']).to eq('success')
       @new_product['product']['id'] = nil
     end

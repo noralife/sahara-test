@@ -7,7 +7,7 @@ describe 'SaharaCustomerAPI' do
   end
   context 'without new customer' do
     it 'shows customer list' do
-      response = get '/api/v1/customers', 'SAHARA_TOKEN' => @admin_token
+      response = get '/api/v1/customers', 'SAHARA-TOKEN' => @admin_token
       expect(response.size).to be > 3
     end
   end
@@ -19,7 +19,7 @@ describe 'SaharaCustomerAPI' do
       @new_customer = post(
         '/api/v1/customers',
         { 'email' => "api#{id}@ho.ge", name: 'api', password: 'api', token: 'api', role: 'user'},
-        'SAHARA_TOKEN' => @admin_token
+        'SAHARA-TOKEN' => @admin_token
       )
       @new_customer_token = post(
         '/api/v1/login',
@@ -32,7 +32,7 @@ describe 'SaharaCustomerAPI' do
         delete(
           '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
           '',
-          'SAHARA_TOKEN' => @new_customer_token
+          'SAHARA-TOKEN' => @new_customer_token
         )
       end
     end
@@ -45,7 +45,7 @@ describe 'SaharaCustomerAPI' do
     it 'shows customer detail' do
       response = get(
         '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
-        'SAHARA_TOKEN' => @new_customer_token
+        'SAHARA-TOKEN' => @new_customer_token
       )
       expect(response['id']).to eq(@new_customer['customer']['id'])
       expect(response['email']).to eq(@new_customer['customer']['email'])
@@ -56,7 +56,7 @@ describe 'SaharaCustomerAPI' do
       response = put(
         '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
         { 'name' => 'new api' },
-        'SAHARA_TOKEN' => @new_customer_token
+        'SAHARA-TOKEN' => @new_customer_token
       )
       expect(response['status']).to eq('success')
       expect(response['customer']['id']).to eq(@new_customer['customer']['id'])
@@ -67,7 +67,7 @@ describe 'SaharaCustomerAPI' do
       response = delete(
         '/api/v1/customers/' + @new_customer['customer']['id'].to_s,
         '',
-        'SAHARA_TOKEN' => @new_customer_token
+        'SAHARA-TOKEN' => @new_customer_token
       )
       expect(response['status']).to eq('success')
       expect(response['customer']['id']).to eq(@new_customer['customer']['id'])

@@ -73,3 +73,4 @@ end
 
 Capybara.default_driver = :selenium
 Capybara.app_host = ENV['SAHARA_URL'] || 'http://localhost:3000'
+Capybara.default_max_wait_time = 5

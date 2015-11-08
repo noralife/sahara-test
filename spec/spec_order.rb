@@ -6,7 +6,7 @@ describe 'SaharaOrderAPI' do
   end
   context 'without new order' do
     it 'shows order list' do
-      response = get '/api/v1/orders', 'SAHARA_TOKEN' => @token
+      response = get '/api/v1/orders', 'SAHARA-TOKEN' => @token
       expect(response.size).to be > 0
     end
   end
@@ -16,7 +16,7 @@ describe 'SaharaOrderAPI' do
       @new_order = post(
         '/api/v1/orders',
         { 'customer_id' => 1, 'product_id' => 1 },
-        'SAHARA_TOKEN' => @token
+        'SAHARA-TOKEN' => @token
       )
     end
 
@@ -25,7 +25,7 @@ describe 'SaharaOrderAPI' do
         delete(
           '/api/v1/orders/' + @new_order['order']['id'].to_s,
           '',
-          'SAHARA_TOKEN' => @token
+          'SAHARA-TOKEN' => @token
         )
       end
     end
@@ -38,7 +38,7 @@ describe 'SaharaOrderAPI' do
     it 'shows order detail' do
       response = get(
         '/api/v1/orders/' + @new_order['order']['id'].to_s,
-        'SAHARA_TOKEN' => @token
+        'SAHARA-TOKEN' => @token
       )
       expect(response['id']).to eq(@new_order['order']['id'])
       expect(response['customer_id']).to eq(@new_order['order']['customer_id'])
@@ -49,7 +49,7 @@ describe 'SaharaOrderAPI' do
       response = put(
         '/api/v1/orders/' + @new_order['order']['id'].to_s,
         { 'status' => 'ok' },
-        'SAHARA_TOKEN' => @token
+        'SAHARA-TOKEN' => @token
       )
       expect(response['order']['id']).to eq(@new_order['order']['id'])
       expect(response['status']).to eq('success')
@@ -59,7 +59,7 @@ describe 'SaharaOrderAPI' do
       response = delete(
         '/api/v1/orders/' + @new_order['order']['id'].to_s,
         '',
-        'SAHARA_TOKEN' => @token
+        'SAHARA-TOKEN' => @token
       )
       expect(response['status']).to eq('success')
       @new_order['order']['id'] = nil
